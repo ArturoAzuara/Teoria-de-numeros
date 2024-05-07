@@ -46,6 +46,14 @@ def num_iguales(numero_p, numero_q):
     else:
         return False
 
+def mcd(producto_de_phi, num):
+    while num != 0:
+        producto_de_phi, num = num, producto_de_phi % num
+    return producto_de_phi
+
+def son_coprimos(producto_de_phi, num):
+    return mcd(producto_de_phi, num) == 1
+
 
 try:
     numero_p = int(input("Introduce 1er numero primo: "))
@@ -60,8 +68,13 @@ try:
     producto_n = numero_p * numero_q
     print(f"El resultado del producto de 'n' es: {producto_n}")
     producto_de_phi = (numero_p - 1) * (numero_q - 1)
-    print(f"El resultado del producto de 'z' es: {producto_de_phi}")
-    mcd = int(input("Introduce un numero coprimo con phi: "))
+    print(f"El resultado del producto de 'phi' es: {producto_de_phi}")
+
+    calculo_mcd = int(input("Introduce un numero coprimo con phi: "))
+    while not son_coprimos(producto_de_phi, calculo_mcd):
+        print(f"{calculo_mcd} no es coprimo con {producto_de_phi}.")
+        calculo_mcd = int(input("Introduce un numero coprimo con phi: "))
+    print(f"MCD ({producto_de_phi}, {calculo_mcd})")
 
 
 except ValueError:
