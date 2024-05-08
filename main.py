@@ -54,17 +54,18 @@ def mcd(producto_de_phi, num):
 def son_coprimos(producto_de_phi, num):
     return mcd(producto_de_phi, num) == 1
 
-def inverso_modular(a, m):
-    r0, r1 = m, a
-    x0, x1 = 0, 1
-    while r1 != 0:
-        q = r0 // r1
-        r0, r1 = r1, r0 - q * r1
-        x0, x1 = x1, x0 - q * x1
-    if r0 != 1:
+def inverso_modular(mcd, producto_phi):
+    resto_actual, resto_anterior = producto_phi, mcd
+    coef_actual, coef_anterior = 0, 1
+    while resto_anterior != 0:
+        cociente = resto_actual // resto_anterior
+        resto_actual, resto_anterior = resto_anterior, resto_actual - cociente * resto_anterior
+        coef_actual, coef_anterior = coef_anterior, coef_actual - cociente * coef_anterior
+    if resto_actual != 1:
         return None
     else:
-        return x0 % m
+        return coef_actual % producto_phi
+
 
 while True:
     try:
