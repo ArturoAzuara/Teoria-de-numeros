@@ -46,13 +46,16 @@ def num_iguales(numero_p, numero_q):
     else:
         return False
 
+
 def mcd(producto_de_phi, num):
     while num != 0:
         producto_de_phi, num = num, producto_de_phi % num
     return producto_de_phi
 
+
 def son_coprimos(producto_de_phi, num):
     return mcd(producto_de_phi, num) == 1
+
 
 def inverso_modular(mcd, producto_phi):
     resto_actual, resto_anterior = producto_phi, mcd
@@ -65,6 +68,14 @@ def inverso_modular(mcd, producto_phi):
         return None
     else:
         return coef_actual % producto_phi
+
+def encriptar(mensaje, clave_publica):
+    return [(ord(char) ** clave_publica[0]) % clave_publica[1] for char in mensaje]
+
+
+def desencriptar(mensaje_encriptado, clave_privada):
+    return ''.join([chr((char ** clave_privada[0]) % clave_privada[1]) for char in mensaje_encriptado])
+
 
 
 while True:
@@ -101,10 +112,30 @@ while True:
                 print(f"El inverso modular de: ({calculo_mcd} y {producto_de_phi}) es = ", inverso)
                 print("")
                 break
+
+        clave_publica = (calculo_mcd, producto_n)
+        clave_privada = (inverso, producto_n)
         print("")
         print(f"Tu clave pública es: ({calculo_mcd},{producto_n})")
         print(f"Tu clave privada es: ({inverso},{producto_n})")
         print("")
+
+        while True:
+            mensaje = input("Introduce el mensaje a encriptar: ")
+            mensaje_encriptado = encriptar(mensaje, clave_publica)
+            print(f"Mensaje encriptado: {mensaje_encriptado}")
+            mensaje_desencriptado = None
+            desencriptado_exitoso = False
+            while not desencriptado_exitoso:
+                clave = input("Introduce la clave privada para desencriptar (separando los números por coma): ")
+                clave_ingresada = tuple(map(int, clave.split(',')))
+                if clave_ingresada == clave_privada:
+                    mensaje_desencriptado = desencriptar(mensaje_encriptado, clave_privada)
+                    print(f"Mensaje desencriptado: {mensaje_desencriptado}")
+                    desencriptado_exitoso = True
+                else:
+                    print("Clave incorrecta, inténtalo nuevamente")
+            break
     except ValueError:
         print("Error, intenta de nuevo")
     break
